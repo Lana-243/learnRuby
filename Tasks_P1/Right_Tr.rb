@@ -14,12 +14,11 @@ if a > b && a > c
   if b.to_i**2 + c.to_i**2 == a.to_i**2
     if b == c
       puts 'This triangle is Right and Isosceles'
-      no_tr_type = false
     else
       # прямоугольный
       puts 'This triangle is Right'
-      no_tr_type = false
     end
+    no_tr_type = false
   elsif b == c
     # равнобедренный
     puts 'This triangle is Isosceles'
@@ -30,12 +29,11 @@ elsif b > a && b > c
   if a.to_i**2 + c.to_i**2 == b.to_i**2
     if a == c
       puts 'This triangle is Right and Isosceles'
-      no_tr_type = false
     else
       # прямоугольный
       puts 'This triangle is Right'
-      no_tr_type = false
     end
+    no_tr_type = false
   elsif a == c
     # равнобедренный
     puts 'This triangle is Isosceles'
@@ -46,12 +44,11 @@ elsif c > a && c > b
   if a.to_i**2 + b.to_i**2 == c.to_i**2
     if a == b
       puts 'This triangle is Right and Isosceles'
-      no_tr_type = false
     else
       # прямоугольный
       puts 'This triangle is Right'
-      no_tr_type = false
     end
+    no_tr_type = false
   elsif a == b
     # равнобедренный
     puts 'This triangle is Isosceles'
