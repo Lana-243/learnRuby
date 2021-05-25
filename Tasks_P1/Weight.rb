@@ -1,7 +1,7 @@
 puts 'What is your name?'
 name = gets.chomp
 
-puts 'What is your height?'
+puts 'What is your height, huh?'
 height = gets.chomp
 perf_weight = (height.to_i - 110) * 1.15
 
