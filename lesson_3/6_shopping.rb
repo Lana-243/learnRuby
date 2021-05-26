@@ -15,7 +15,7 @@ loop do
   puts 'What is material price?'
   price = gets.chomp.to_f
 
-  shopping_cart[material] = [quantity, price]
+  shopping_cart[material] = { price: price, quantity: quantity }
   if shopping_cart_sum[material].nil?
     shopping_cart_sum[material] = quantity * price
   else

@@ -14,7 +14,7 @@ months = { january: 31,
 months_30 = []
 months.each do |month_name, days|
   if days == 30
-      months_30 << month_name
+    months_30 << month_name
   end
 end
 
