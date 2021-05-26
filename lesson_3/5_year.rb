@@ -28,7 +28,7 @@ full_sum = 0
 months.each_key do |month_num|
     if month_num <= month_answ && !(month_num == 1)
       full_sum +=  months[month_num]
-  end  
+  end
 end
 
 full_sum += day_answ
