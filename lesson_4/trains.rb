@@ -1,26 +1,25 @@
-puts 'Please enter Station name you would like to control'
-gets = station_name
-answer_train = new.Train(station_name)
+class Station
+  @@trains_at_station = {}
 
-puts 'Please enter train number'
-gets = answ_train_number
-puts 'Please enter train number'
-gets = answ_train_number
-puts 'Please enter number of carriages'
-gets = answ_train_number
+  def initialize(station_name)
+    @station_name = station_name
+  end
 
+  def add_train_to_station(train_number, train_type)
+    @@trains_at_station[train_number] = train_type
+  end
 
-train = new.Train(answ_train_number, answ_train_number, answ_train_number)
+  def Self.trains_list
+    @@trains_at_station
+    #add types
+  end
 
-
-loop do
-  puts 'What would you like to do?'
-  gets = chosen_action
-
-
-  break if chosen_action == 'stop'
+  def train_leaving(train_leaving_name)
+    @train_leaving_name = train_leaving_name
+    #@trains = @trains.reject {|item| item.number == train.number}
+    #delete from hash
+  end
 end
-
 
 class Route
   @@route = []
@@ -47,35 +46,6 @@ class Route
     puts @@route
   end
 end
-
-class Station < Train
-  @@trains_at_station = {}
-
-  def initialize(station_name)
-    @station_name = station_name
-  end
-
-  def train_station_add(train_number, train_type)
-    @@trains_at_station[train_number] = train_type
-  end
-
-  def Station.trains_list
-    puts @@trains_at_station
-  end
-
-  #list of trains absed on type
-
-  def train_leaving(train_leaving_name)
-    @train_leaving_name = train_leaving_name
-    #delete from hash
-  end
-end
-
-newst = Route.new('stat1', 'stat2')
-newst.add_station_to_route('stat_3')
-newst.add_station_to_route('stat_4')
-newst.del_station_from_route('stat_3')
-newst.route_show
 
 class Train
   @@train_type_list = {}
