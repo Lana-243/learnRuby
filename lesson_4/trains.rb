@@ -5,31 +5,31 @@ class Station
     @cargo_trains = []
   end
 
-  def add_train_to_station(name)
-    case name.type
+  def add_train_to_station(train)
+    case train.type
     when 'Cargo'
-      @cargo_trains << name
+      @cargo_trains << train
     when 'Passenger'
-      @passenger_trains << name
+      @passenger_trains << train
     end
   end
 
   def all_trains
-    @all_trains = @passenger_trains + @cargo_trains
+    @passenger_trains + @cargo_trains
   end
 
   def trains_list_full
-    @all_trains.each { |name| puts name}
+    all_trains.map(&:train).join(‘, ’)
   end
 
   def trains_list_by_type
-    puts "Passanger trains: #{@passenger_trains.map(&:name).join(‘, ’)}; Cargo trains: #{@cargo_trains.map(&:name).join(‘, ’)}"
+    puts "Passenger trains: #{@passenger_trains.map(&:train).join(‘, ’)}; Cargo trains: #{@cargo_trains.map(&:train).join(‘, ’)}"
   end
 
-  def train_leaving(train_leaving_name)
-    if (@passenger_trains + @cargo_trains).include? train_leaving_name
-      @passenger_trains.delete_if { |passenger| passenger.include? train_leaving_name }
-      @cargo_trains.delete_if { |cargo| cargo.include? train_leaving_name }
+  def train_leaving(train_leaving)
+    if (@passenger_trains + @cargo_trains).include? train_leaving
+      @passenger_trains.delete_if { |passenger| passenger.include? train_leaving }
+      @cargo_trains.delete_if { |cargo| cargo.include? train_leaving }
     end  
  end
 
@@ -46,19 +46,19 @@ class Route
   end
 
   def trains_list_full
-    @route_stations.each { |station| puts station}
+    @route_stations.map(&:train).join(‘, ’)
   end
 
   def del_station(station_to_del)
       @route_stations.delete(station_to_del) if @route_stations.include? station_to_del
   end
+end 
 
 class Train
-  attr_reader :type, :speed, :carriages_number
+  attr_reader :name, :type, :speed, :carriages_number
   def initialize(name, type, carriages_number)
     @name = name
-    @train_type_list = {}
-    @train_type_list[name] = type
+    @type = type
     @carriages_number = carriages_number
     @speed = 0
   end
@@ -75,7 +75,7 @@ class Train
     if @speed.zero? && (carriages_number + change_car) > 0
       @carriages_number += change_car
     end
-  end
+  end 
 
   def route_add(route)
     @route = route
