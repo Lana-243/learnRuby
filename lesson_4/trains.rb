@@ -90,10 +90,6 @@ class Train
     @route.current_station.add_train(self)
   end
 
-  def current_station
-    @route.stations[@station_index]
-  end
-
   def next_station
     @route.stations[@station_index + 1]
   end
