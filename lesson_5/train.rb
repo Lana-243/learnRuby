@@ -1,23 +1,8 @@
-class Train
-  attr_reader :name, :type, :speed, :carriages_number
-
-  def initialize(name, type, carriages_number)
-    @name = name
-    @type = type
-    @carriages_number = carriages_number
-    @speed = 0
-  end
+class Train < RailRoad
+  attr_reader :name, :type, :speed
 
   def add_speed(speed)
     @speed += speed if speed > 0
-  end
-
-  def train_stop
-    @speed = 0
-  end
-
-  def carriages_number_change(change_car)
-    @carriages_number += change_car if @speed.zero? && (carriages_number + change_car).positive?
   end
 
   def add_route(route)
@@ -48,5 +33,21 @@ class Train
 
   def previous_station
     @route.stations[@station_index - 1] if station_index > 0
+  end
+end
+
+class PassengerTrain < Train
+  def initialize(name)
+    @name = name
+    @speed = 0
+    @trains[:passenger] << name
+  end
+end
+
+class CargoTrain < Train
+  def initialize(name)
+    @name = name
+    @speed = 0
+    @trains[:cargo] << name
   end
 end

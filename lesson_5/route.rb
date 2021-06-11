@@ -1,5 +1,6 @@
-class Route
-  attr_reader :route, :first_station
+class Route < RailRoad
+
+  attr_reader :route, :first_station, :last_station
 
   def initialize(route, first_station, last_station)
     @route = route
@@ -8,10 +9,6 @@ class Route
 
   def add_station(middle_station)
     @route.insert(-2, middle_station)
-  end
-
-  def trains_list_full
-    @stations.map(&:station_name).join(‘, ’)
   end
 
   def delete_station(station)
