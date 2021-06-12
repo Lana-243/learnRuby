@@ -10,7 +10,7 @@ class Station < RailRoad
     @trains[train.type] = train
   end
 
-  def trains_list
+  def trains_list(station)
     @trains.map(&:name).join(', ')
   end
 

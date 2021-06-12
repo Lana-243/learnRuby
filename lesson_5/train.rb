@@ -20,7 +20,6 @@ class Train < RailRoad
     @station_index += 1
     @route.current_station.add_train(self)
   end
-
   def move_backward
     @route.current_station.train_leaving(self)
     @station_index -= 1
