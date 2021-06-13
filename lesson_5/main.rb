@@ -132,20 +132,47 @@ def train_change
 end
 
 def route_change
-  puts 'Press 1 is you want to create a route'
-  puts 'Press 2 is you want to add station to the route'
-  puts 'Press 3 is you want to delete station from the route'
+  puts 'Press 1 is you want to add station to the route'
+  puts 'Press 2 is you want to delete station from the route'
   puts 'Press any other key to exit the program' 
   route_change_answer = gets.chomp
   case route_change_answer
     when '1'
-      
+      puts 'Enter route name'
+      route = gets.chomp
+      if @routes.include? route
+        puts 'There is no route with this name'
+        break
+      end
+      puts 'Enter station name'
+      station_add = gets.station_add
+      if @stations.include? station_add
+        puts 'There is no station with this name'
+        break
+      end
+      if route.route_stations.include? station_add
+        puts 'There is aleady such station at this route'
+        break
+      end
+      additional_station.add_station(station_add)
     when '2'
-    
-    when '3'
-    
-  else
-    break
+      puts 'Enter route name'
+      route = gets.chomp
+      if @routes.include? route
+        puts 'There is no route with this name'
+        break
+      end
+      puts 'Enter station name'
+      station = gets.station
+      if @stations.include? station
+        puts 'There is no station with this name'
+        break
+      end
+      if route.route_stations.include? station
+        delete_station(station)
+      end
+    else
+      break
   end
 end
 
