@@ -24,8 +24,7 @@ loop do
       view
     else 
         break   
-    end
-end
+  end
 
 def create
   puts 'Press 1 is you want to create a train'
