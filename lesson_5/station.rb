@@ -4,20 +4,23 @@ class Station < RailRoad
   def initialize(station_name)
     @station_name = station_name
     @stations << station_name
+    @trains = []
   end
 
+  def add_train!(train)
+    @trains << train
+  end
+  
+  def add_train?(train)
+   false if @trains.include? train
+  end
+  
   def add_train(train)
-    @trains[train.type] = train
+    add_train!(train) if add_train?(train)
   end
 
   def trains_list(station)
-    @trains.map(&:name).join(', ')
-  end
-
-  def trains_list_by_type
-    passenger_trains = @trains.select { |train| train.type == 'Passenger' }.map(&:name).join(', ')
-    cargo_trains = @trains.select { |train| train.type == 'Cargo' }.map(&:name).join(', ')
-    puts "Passenger trains: #{passenger_trains}; Cargo trains: #{cargo_trains}"
+    @trains.map(&:train).join(', ')
   end
 
   def train_leaving(train)

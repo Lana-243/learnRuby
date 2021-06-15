@@ -1,12 +1,10 @@
 require_relative 'route.rb'
 require_relative 'station.rb'
 require_relative 'train.rb'
-
-class RailRoad
-    @stations = []
-    @routes = []
-end
-
+require_relative 'carriage_cargo.rb'
+require_relative 'carriage_passenger.rb'
+require_relative 'train_cargo.rb'
+require_relative 'train_passenger.rb'
 
 loop do
   puts 'Press 1 is you want to create a train, a route or a station'

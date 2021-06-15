@@ -1,9 +1,5 @@
 class Train < RailRoad
-  attr_reader :name, :type, :speed
-
-  def add_speed(speed)
-    @speed += speed if speed > 0
-  end
+  attr_reader :name
 
   def add_route(route)
     @route = route
@@ -20,33 +16,37 @@ class Train < RailRoad
     @station_index += 1
     @route.current_station.add_train(self)
   end
+  
   def move_backward
     @route.current_station.train_leaving(self)
     @station_index -= 1
     @route.current_station.add_train(self)
   end
 
-  def next_station
-    @route.stations[@station_index + 1]
+  def add_carriage?(train, carriage)
+    (train.class == PassengerTrain && carriage.class == PassengerCarriage) ||(train.class == CargoTrain && carriage.class == CargoCarriage)
+  end
+  
+  def add carriage!(train, carriage)
+    @trains[:train] << carriage if add_carriage?
   end
 
-  def previous_station
-    @route.stations[@station_index - 1] if station_index > 0
+  def add carriage(train, carriage)
+    add_carriage(train, carriage) if add_carriage?(train, carriage)
   end
+  
+  def delete_carriage?(train, carriage)
+    @train[:train].include? carriage
+  end
+  
+  def delete carriage!(train, carriage)
+     @trains[:train].delete(carriage)
+  end
+  
+    def delete carriage!(train, carriage)
+     delete carriage!(train, carriage) if delete_carriage?(train, carriage)
+  end
+  
 end
 
-class PassengerTrain < Train
-  def initialize(name)
-    @name = name
-    @speed = 0
-    @trains[:passenger] << name
-  end
-end
 
-class CargoTrain < Train
-  def initialize(name)
-    @name = name
-    @speed = 0
-    @trains[:cargo] << name
-  end
-end
