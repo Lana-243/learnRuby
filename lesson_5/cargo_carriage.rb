@@ -1,3 +1,3 @@
-class CargoCarriage
+class CargoCarriage < Train
 
 end

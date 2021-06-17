@@ -12,7 +12,6 @@ loop do
   puts 'Press 3 if you want to view info'
   puts 'Press any other key to exit the program'
   answer = gets.chomp
-  
   case answer
   when '1'
     create
@@ -20,9 +19,8 @@ loop do
     change
   when '3'
     view
-  else 
-      break   
   end
+  break   
 end
 
 def create
@@ -31,60 +29,60 @@ def create
   puts 'Press 3 if you want to create a station'
   puts 'Press any other key to exit the program'
   creation_answer = gets.chomp
-    
   case creation_answer
   when '1'
-    puts 'What is the train type?'
-    puts 'Press 1 if it is Passenger train'
-    puts 'Press 2 if it is Cargo train'
-    puts 'Press any other key to exit the program'
-    train_type_anser = gets.chomp
-    if train_type_anser = '1'
-       puts 'Enter train name'
-      train_name = gets.chomp
-      train_name = PassengerTrain.new(train_name)
-    elsif '2'
-      puts 'Enter train name'
-      train_name = gets.chomp
-      train_name = CargoTrain.new(train_name)          
-    else
-      break
-    end
-    
+    create_train
   when '2'
-    puts 'Enter route name'
-    name = gets.chomp 
-      if @routes.include? name
-        puts 'There is already route with this name'
-        break
-      end
-      puts 'Enter first station'
-      first_station = gets.chomp
-      if @stations.include? first_station
-        puts 'There is no station with this name'
-        break
-      end
-      puts 'Enter last station'
-      last_station = gets.chomp
-      if @stations.include? last_station
-        puts 'There is no station with this name'
-        break
-      end
-      name = Route.new(name, first_station, last_station)
-      break
+    create_route
   when '3'
-    puts 'Enter station name'
-    name = gets.chomp 
-      if @stations.include? name
-        puts 'There is already station with this name'
-        break
-      end
-    name = Station.new(name)  
-  else
-    break
+    create_station
+  end
 end
 
+def create_train
+  puts 'What is the train type?'
+  puts 'Press 1 if it is Passenger train'
+  puts 'Press 2 if it is Cargo train'
+  puts 'Press any other key to exit the program'
+  train_type_anser = gets.chomp
+  if train_type_anser == '1'
+     puts 'Enter train name'
+    train_name = gets.chomp
+    train_name = PassengerTrain.new(train_name)
+  elsif train_type_anser == '2'
+    puts 'Enter train name'
+    train_name = gets.chomp
+    train_name = CargoTrain.new(train_name)          
+  end
+end
+ 
+def create_route
+  puts 'Enter route name'
+  name = gets.chomp 
+    if @routes.include? name
+      puts 'There is already route with this name'
+    end
+    puts 'Enter first station'
+    first_station = gets.chomp
+    if @stations.include? first_station
+      puts 'There is no station with this name'
+    end
+    puts 'Enter last station'
+    last_station = gets.chomp
+    if @stations.include? last_station
+      puts 'There is no station with this name'
+    end
+    name = Route.new(name, first_station, last_station)
+end
 
+def create_station
+  puts 'Enter station name'
+  name = gets.chomp 
+    if @stations.include? name
+      puts 'There is already station with this name'
+    end
+  name = Station.new(name)  
+end
 
 def change
   puts 'Press 1 if you want to change a train'
@@ -99,8 +97,6 @@ def change
       route_change
     when '3'
       station_change
-    else
-      break
   end
 end
 
@@ -112,7 +108,6 @@ def train_change
   puts 'Press 5 if you want to move train backward'
   puts 'Press any other key to exit the program' 
   train_change_answer = gets.chomp
-  
   case train_change_answer  
   when '1'
     puts 'Enter train name'
@@ -132,8 +127,6 @@ def train_change
       carriage = CargoCarriage.new
     elsif type == '2'
       carriage = PassengerCarriage.new
-    else
-      break
     end
     add_carriage(train, carriage)
   when '3'
@@ -150,9 +143,6 @@ def train_change
     puts 'Enter train name'
     train_name = gets.chomp
     train_name.move_backward
-  else
-    break
-    
   end
 end
 
@@ -167,17 +157,14 @@ def route_change
       route = gets.chomp
       if @routes.include? route
         puts 'There is no route with this name'
-        break
       end
       puts 'Enter station name'
       station = gets.chomp
       if @stations.include? station
         puts 'There is no station with this name'
-        break
       end
       if route.route_stations.include? station
         puts 'There is aleady such station at this route'
-        break
       end
       additional_station.add_station(station_add)
     when '2'
@@ -185,19 +172,15 @@ def route_change
       route = gets.chomp
       if @routes.include? route
         puts 'There is no route with this name'
-        break
       end
       puts 'Enter station name'
       station = gets.chomp
       if @stations.include? station
         puts 'There is no station with this name'
-        break
       end
       if route.route_stations.include? station
         route.delete_station(station)
       end
-    else
-      break
   end
 end
 
@@ -219,8 +202,6 @@ def station_change
     puts 'Enter station name'
     station = gets.chomp
     station.train_leaving(train)
-  else
-    break
   end
 end
 
@@ -237,9 +218,7 @@ def view
       station = gets.chomp
       if @stations.include? station
         puts 'There is no station with this name'
-        break
       end
-      station.@trains.map(&:train).join(', ')
-  else
-    break
+      station.trains.map(&:train).join(', ')
   end
+end
