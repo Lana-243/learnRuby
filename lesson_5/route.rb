@@ -1,4 +1,4 @@
-class Route
+class Route < RailRoad
 
   attr_reader :route, :first_station, :last_station
 

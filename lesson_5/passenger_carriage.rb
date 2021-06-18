@@ -1,3 +1,3 @@
 class PassengerCarriage < Train
-
+    
 end

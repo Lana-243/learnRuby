@@ -1,4 +1,4 @@
-class Train
+class Train < RailRoad
   attr_reader :name
 
   def add_route(route)

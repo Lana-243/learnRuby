@@ -1,10 +1,12 @@
-class Station
-  attr_reader :trains, :station_name
+class Station < RailRoad
+
+  attr_reader :trains, :station_name, :stations
 
   def initialize(station_name)
     @station_name = station_name
-    @stations << station_name
     @trains = []
+    @stations << station_name
+    end
   end
   
   def add_train(train)
