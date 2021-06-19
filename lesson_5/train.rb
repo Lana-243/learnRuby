@@ -1,5 +1,9 @@
-class Train < RailRoad
-  attr_reader :name
+class Train 
+  attr_reader :name, :carriages
+  
+  def initialize(name)
+    @name = name
+  end
 
   def add_route(route)
     @route = route
@@ -7,7 +11,7 @@ class Train < RailRoad
     @route.stations[0].add_train(self)
   end
   
-    def current_station
+  def current_station
     @route.stations[@station_index]
   end
 

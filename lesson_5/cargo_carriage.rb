@@ -1,3 +1,4 @@
-class CargoCarriage < Train
+require_relative 'train.rb'
+class CargoCarriage
 
 end

@@ -1,6 +1,5 @@
 require_relative 'route.rb'
 require_relative 'station.rb'
-require_relative 'train.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'passenger_carriage.rb'
 require_relative 'train_cargo.rb'
@@ -35,6 +34,7 @@ class RailRoad
       end
     end
   end  
+  
   def create
     puts 'Press 1 if you want to create a train'
     puts 'Press 2 if you want to create a route'
@@ -50,7 +50,7 @@ class RailRoad
         create_station
     end
   end
-    
+  
   def create_train
     puts 'What is the train type?'
     puts 'Press 1 if it is Passenger train'
@@ -58,18 +58,32 @@ class RailRoad
     puts 'Press any other key to exit the program'
     train_type_anser = gets.chomp
     if train_type_anser == '1'
-       puts 'Enter train name'
-      train_name = gets.chomp
-      train_name = PassengerTrain.new(train_name) if no_train(train_name)
+      create_passenger
     elsif train_type_anser == '2'
-      puts 'Enter train name'
-      train_name = gets.chomp
-      train_name = CargoTrain.new(train_name) if no_train(train_name)         
+      create_cargo
     end
   end
   
-  def no_train(name)
-    self.trains.include? == false
+  def create_cargo
+    puts 'Enter train name'
+    train = gets.chomp
+    if no_train(train)   
+      train = CargoTrain.new(train)
+      @trains << train.name
+    end
+  end
+  
+  def create_passenger
+    puts 'Enter train name'
+    train = gets.chomp
+    if no_train(train)   
+      train = PassengerTrain.new(train)
+      @trains << train.name
+    end
+  end
+  
+  def no_train(train)
+    @trains.include? train == false
   end
   
   def create_route
@@ -95,8 +109,8 @@ class RailRoad
   def create_station
     puts 'Enter station name'
     name = gets.chomp 
-    name = Station.new(name)  
-    puts stations
+    name = Station.new(name)
+    @stations << name 
   end
   
   def change
@@ -251,26 +265,33 @@ class RailRoad
   def view
     puts 'Press 1 if you want to view station list'
     puts 'Press 2 if you want to view train list at a station'
+    puts 'Press 3 if you want to view train list at the railroad'
     puts 'Press any other key to exit the program' 
     view_answer = gets.chomp
     case view_answer
       when '1'
-        @stations.map(&:station_name).join(', ')
+        @stations.map(&:name).join(', ') 
       when '2'
         puts 'Enter station name'
         station = gets.chomp
         if @stations.include? station
           puts 'There is no station with this name'
         end
-        station.trains.map(&:train).join(', ')
+        puts station.trains_list
+      when '3'
+       puts @trains.map(&:name).join(', ')
     end
   end  
   
-  def view_station_list
-    stations.map(&:station_name).join(', ') if stations.any? == false
+  def view_station_list(station)
+    puts station.map(&:name).join(', ')
+  end
+
+  def view_train_list(station)
+    puts station.map(&:name).join(', ')
   end
 end
 
-rr = Railroad.new
+rr = RailRoad.new
 
 rr.menu
