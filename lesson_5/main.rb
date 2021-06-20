@@ -282,20 +282,20 @@ class RailRoad
     view_answer = gets.chomp
     case view_answer
       when '1'
-        @stations.map(&:name).join(', ') 
+        view_station_list
       when '2'
         puts 'Enter station name'
         station = gets.chomp
         if no_station(station)
           puts 'There is no station with this name'
         else
-          puts station.trains_list
+          puts view_train_list(station)
         end
     end
   end  
   
-  def view_station_list(station)
-    puts station.map(&:name).join(', ')
+  def view_station_list
+    puts @stations.map(&:name).join(', ')
   end
 
   def view_train_list(station)
