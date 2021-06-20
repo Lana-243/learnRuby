@@ -10,7 +10,7 @@ class RailRoad
   
   def initialize
     @stations = []
-    @trains = {}
+    @trains = []
     @routes = []
     @carriages = []
   end
@@ -278,7 +278,6 @@ class RailRoad
   def view
     puts 'Press 1 if you want to view station list'
     puts 'Press 2 if you want to view train list at a station'
-    puts 'Press 3 if you want to view train list at the railroad'
     puts 'Press any other key to exit the program' 
     view_answer = gets.chomp
     case view_answer
@@ -287,12 +286,11 @@ class RailRoad
       when '2'
         puts 'Enter station name'
         station = gets.chomp
-        if @stations.include? station
+        if no_station(station)
           puts 'There is no station with this name'
+        else
+          puts station.trains_list
         end
-        puts station.trains_list
-      when '3'
-       view_all_trains
     end
   end  
   
@@ -301,11 +299,7 @@ class RailRoad
   end
 
   def view_train_list(station)
-    puts station.map(&:name).join(', ')
-  end
-  
-  def view_all_trains
-    puts @trains.map(&:name).join(', ')
+    puts station.trains.map(&:name).join(', ')
   end
 end
 
