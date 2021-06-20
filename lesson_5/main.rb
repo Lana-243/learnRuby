@@ -35,6 +35,22 @@ class RailRoad
     end
   end  
   
+  def no_train(train)
+    train =! @trains.find{ |tr| tr.name == train}
+  end
+  
+  def no_station(station)
+    station =! @stations.find{ |st| st.name == station}
+  end
+  
+  def no_route(route)
+    route =! @routes.find{ |rt| rt.name == route}
+  end
+  
+  def no_carriages(car)
+    car =! @carriages.find{ |car| car.name == car}
+  end
+  
   def create
     puts 'Press 1 if you want to create a train'
     puts 'Press 2 if you want to create a route'
@@ -67,50 +83,50 @@ class RailRoad
   def create_cargo
     puts 'Enter train name'
     train = gets.chomp
-    if no_train(train)   
-      train = CargoTrain.new(train)
-      @trains << train.name
+    if no_train(train)
+      @trains << CargoTrain.new(train)
+    else
+      'Train was not created'
     end
   end
   
   def create_passenger
     puts 'Enter train name'
     train = gets.chomp
-    if no_train(train)   
-      train = PassengerTrain.new(train)
-      @trains << train.name
+    if no_train(train)
+      @trains << PassengerTrain.new(train)
+    else
+      'Train was not created'
     end
-  end
-  
-  def no_train(train)
-    @trains.include? train == false
   end
   
   def create_route
     puts 'Enter route name'
-    name = gets.chomp 
-    if routes.include? name
-      puts 'There is already route with this name'
-    end
+    route = gets.chomp 
     puts 'Enter first station'
     first_station = gets.chomp
-    if stations.include? first_station
-      puts 'There is no station with this name'
-    end
     puts 'Enter last station'
     last_station = gets.chomp
-    if stations.include? last_station
-      puts 'There is no station with this name'
+    
+    if no_route(route) && no_station(first_station) && no_station(last_station)
+      new_route(route, first_station, last_station)
+    else
+      'Route was not created. Please check the data'
     end
-    name = Route.new(name, first_station, last_station)
-    puts 'Route has been created'
   end
   
+  def new_route(name, first_station, last_station)
+    @routes << Route.new(name, first_station, last_station)
+  end
+
   def create_station
     puts 'Enter station name'
     name = gets.chomp 
-    name = Station.new(name)
-    @stations << name 
+    if no_station(name)
+      @stations << Station.new(name) 
+    else
+      'Station was not created. Please check the data'
+    end
   end
   
   def change
@@ -127,50 +143,6 @@ class RailRoad
       when '3'
         station_change
     end
-  end
-  
-  def assign_route
-    puts 'Enter train name'
-    train = gets.chomp
-    puts 'Enter route name'
-    route = gets.chomp
-    train.add_route(route)
-  end
-  
-  def add_carriages
-    puts 'Enter train name'
-    train = gets.chomp
-    puts 'Enter carriage name'
-    carriage = gets.chomp
-    puts 'Press 1 if it is Cargo carriage'
-    puts 'Press 2 if it is Passenger carriage'
-    type = gets.chomp
-    if type == '1'
-      carriage = CargoCarriage.new
-    elsif type == '2'
-      carriage = PassengerCarriage.new
-    end
-    add_carriage(train, carriage)
-  end
-  
-  def delete_carriages
-    puts 'Enter train name'
-    train = gets.chomp
-    puts 'Enter carriage name'
-    carriage = gets.chomp
-    delete_carriage(train, carriage)
-  end
-  
-  def move_forward
-    puts 'Enter train name'
-    train_name = gets.chomp
-    train_name.move_forward
-  end
-  
-  def move_backwards
-    puts 'Enter train name'
-    train_name = gets.chomp
-    train_name.move_backward
   end
   
   def train_change
@@ -194,6 +166,81 @@ class RailRoad
       move_backwards
     end
   end
+  
+  def assign_route
+    puts 'Enter train name'
+    train = gets.chomp
+    puts 'Enter route name'
+    route = gets.chomp
+    if no_train(train) && no_route(route)
+      train.add_route(route)
+    else
+      'Route has not been assigned'
+    end
+  end
+  
+  def add_carriages
+    puts 'Enter train name'
+    train = gets.chomp
+    puts 'Enter carriage name'
+    carriage = gets.chomp
+    puts 'Press 1 if it is Cargo carriage'
+    puts 'Press 2 if it is Passenger carriage'
+    type = gets.chomp
+    if no_train(train) && no_carriages(carriage) && (type = '1' || type = '2')
+      create_carriage(type)
+      add_carriage(train, carriage)
+    else
+      'Carriage has not been added. Please check the data'
+    end
+  end
+  
+  def delete_carriages
+    puts 'Enter train name'
+    train = gets.chomp
+    puts 'Enter carriage name'
+    carriage = gets.chomp
+    
+    delete_carriage(train, carriage)
+  end
+  
+  def carriage_exists(train, carriage)
+    carriage =! train.carriages.find{ |car| car.name == carriage}
+  end
+  
+  def create_carriage(type)
+    if type == '1'
+      @carriages << CargoCarriage.new
+    elsif type == '2'
+      @carriages << PassengerCarriage.new
+    end
+  end
+  
+  def move_forward
+    puts 'Enter train name'
+    train_name = gets.chomp
+    train_name.move_forward
+  end
+  
+  def move_backwards
+    puts 'Enter train name'
+    train_name = gets.chomp
+    train_name.move_backward
+  end
+  
+  def route_change
+    puts 'Press 1 if you want to add station to the route'
+    puts 'Press 2 if you want to delete station from the route'
+    puts 'Press any other key to exit the program' 
+    answer = gets.chomp
+    case answer
+      when '1'
+        change_add_station
+      when '2'
+        change_delete_station
+    end
+  end
+  
   
   def change_add_station
     puts 'Enter route name'
@@ -228,19 +275,7 @@ class RailRoad
     end
   end
   
-  def route_change
-    puts 'Press 1 if you want to add station to the route'
-    puts 'Press 2 if you want to delete station from the route'
-    puts 'Press any other key to exit the program' 
-    answer = gets.chomp
-    case answer
-      when '1'
-        change_add_station
-      when '2'
-        change_delete_station
-    end
-  end
-  
+
   def station_change
     puts 'Press 1 if you want to add a train to the station'
     puts 'Press 2 if yoi want to delete the train from the station'
@@ -279,7 +314,7 @@ class RailRoad
         end
         puts station.trains_list
       when '3'
-       puts @trains.map(&:name).join(', ')
+       view_all_trains
     end
   end  
   
@@ -290,8 +325,11 @@ class RailRoad
   def view_train_list(station)
     puts station.map(&:name).join(', ')
   end
+  
+  def view_all_trains
+    puts @trains.map(&:name).join(', ')
+  end
 end
 
 rr = RailRoad.new
-
 rr.menu
