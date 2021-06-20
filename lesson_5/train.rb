@@ -33,20 +33,16 @@ class Train < Route
     add_carriage!(train, carriage) if add_carriage?(train, carriage)
   end
   
-  def delete_carriage(train, carriage)
-     delete_carriage!(train, carriage) if delete_carriage?(train, carriage)
-  end
-  
   def add_carriage?(train, carriage)
     (train.class == PassengerTrain && carriage.class == PassengerCarriage) ||(train.class == CargoTrain && carriage.class == CargoCarriage)
   end
   
   def add_carriage!(train, carriage)
-    @trains[:train] << carriage if add_carriage?
+    train.carriages << carriage
   end
 
-  def delete_carriage!(train, carriage)
-     @trains[:train].delete(carriage)
+  def delete_carriage(train, carriage)
+     train.carriages.delete(carriage)
   end
 end
 

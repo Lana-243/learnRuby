@@ -136,7 +136,6 @@ class RailRoad
   def change
     puts 'Press 1 if you want to change a train'
     puts 'Press 2 if you want to change a route'
-    puts 'Press 3 if you want to change a station'
     puts 'Press any other key to exit the program'   
     change_answer = gets.chomp
     case change_answer  
@@ -144,8 +143,6 @@ class RailRoad
         train_change
       when '2'
         route_change
-      when '3'
-        station_change
     end
   end
   
@@ -277,37 +274,6 @@ class RailRoad
       route.delete_station(station)
     end
   end
-  
-  def station_change
-    puts 'Press 1 if you want to add a train to the station'
-    puts 'Press 2 if yoi want to delete the train from the station'
-    puts 'Press any other key to exit the program' 
-    action = gets.chomp
-    case action
-    when '1'
-      station_add_train
-    when '2'
-      station_delete_train
-    end
-  end
-  
-  def station_add_train
-    puts 'Enter train name'
-    train = gets.chomp
-    puts 'Enter station name'
-    station = gets.chomp
-    station.add_train(train)
-  end
-  
-  def station_delete_train
-    puts 'Enter train name'
-    train = gets.chomp
-    puts 'Enter station name'
-    station = gets.chomp
-    station.train_leaving(train)
-  end
-  
-  
   
   def view
     puts 'Press 1 if you want to view station list'
