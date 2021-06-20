@@ -10,7 +10,7 @@ class RailRoad
   
   def initialize
     @stations = []
-    @trains = []
+    @trains = {}
     @routes = []
     @carriages = []
   end
@@ -49,6 +49,10 @@ class RailRoad
   
   def no_carriages(car)
     car =! @carriages.find{ |car| car.name == car}
+  end
+  
+  def no_station_at_route(route, station)
+    station =! route.route_stations.find{ |st| st.name == st}
   end
   
   def create
@@ -200,8 +204,11 @@ class RailRoad
     train = gets.chomp
     puts 'Enter carriage name'
     carriage = gets.chomp
-    
-    delete_carriage(train, carriage)
+    if carriage_exists(train, carriage)
+      delete_carriage(train, carriage) 
+    else
+      'Carriage has not been deleted. Please check the data'
+    end
   end
   
   def carriage_exists(train, carriage)
@@ -218,14 +225,22 @@ class RailRoad
   
   def move_forward
     puts 'Enter train name'
-    train_name = gets.chomp
-    train_name.move_forward
+    train = gets.chomp
+    if no_train(train) == false
+      train.move_forward
+    else
+    'There is no such train'
+    end
   end
   
   def move_backwards
     puts 'Enter train name'
-    train_name = gets.chomp
-    train_name.move_backward
+    train = gets.chomp
+    if no_train(train) == false
+      train.move_backward
+    else
+      'There is no such train'
+    end
   end
   
   def route_change
@@ -241,41 +256,28 @@ class RailRoad
     end
   end
   
-  
-  def change_add_station
+  def change_route_add_station
     puts 'Enter route name'
     route = gets.chomp
-    if @routes.include? route
-      puts 'There is no route with this name'
-    end
     puts 'Enter station name'
     station = gets.chomp
-    if @stations.include? station
-      puts 'There is no station with this name'
+    if (no_route(route) == false) && (no_station(station) == false) && no_station_at_route(route, station)
+      route.add_station(station_add)
+    else
+      'Station has not been added. Please check the data'
     end
-    if route.route_stations.include? station
-      puts 'There is aleady such station at this route'
-    end
-    additional_station.add_station(station_add)
   end
   
   def change_delete_station
     puts 'Enter route name'
     route = gets.chomp
-    if @routes.include? route
-      puts 'There is no route with this name'
-    end
     puts 'Enter station name'
     station = gets.chomp
-    if @stations.include? station
-      puts 'There is no station with this name'
-    end
-    if route.route_stations.include? station
+    if (no_route(route) == false) && (no_station(station) == false) && (no_station_at_route(route, station) == false)
       route.delete_station(station)
     end
   end
   
-
   def station_change
     puts 'Press 1 if you want to add a train to the station'
     puts 'Press 2 if yoi want to delete the train from the station'
@@ -283,19 +285,29 @@ class RailRoad
     action = gets.chomp
     case action
     when '1'
-      puts 'Enter train name'
-      train = gets.chomp
-      puts 'Enter station name'
-      station = gets.chomp
-      station.add_train(train)
+      station_add_train
     when '2'
-      puts 'Enter train name'
-      train = gets.chomp
-      puts 'Enter station name'
-      station = gets.chomp
-      station.train_leaving(train)
+      station_delete_train
     end
   end
+  
+  def station_add_train
+    puts 'Enter train name'
+    train = gets.chomp
+    puts 'Enter station name'
+    station = gets.chomp
+    station.add_train(train)
+  end
+  
+  def station_delete_train
+    puts 'Enter train name'
+    train = gets.chomp
+    puts 'Enter station name'
+    station = gets.chomp
+    station.train_leaving(train)
+  end
+  
+  
   
   def view
     puts 'Press 1 if you want to view station list'
