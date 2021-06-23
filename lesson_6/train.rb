@@ -7,17 +7,18 @@ class Train < Route
   include Company
   include InstanceCounter
   
-  def initialize(name)
+  def initialize(name, number)
     @name = name
-    instances
+    @number = number
+    register_instance
   end
   
-  def find_train(name)
-    final = @trains.find{ |tr| tr.name == name}
-     if name ==  final.name
+  def find(number)
+    final = @trains.find{ |tr| tr.number == number}
+     if number ==  final.number
        puts final
-     elsif final == nill
-       puts nill
+     elsif final == nil
+       puts nil
      end
   end
 

@@ -11,7 +11,7 @@ class Station < RailRoad
     @name = name
     @trains = []
     @@stations << name
-    instances
+    register_instance
   end
   
   def add_train(train)
@@ -26,7 +26,8 @@ class Station < RailRoad
     @trains.map(&:train).join(', ')
   end
   
-  def all_objects
+  def all
+    @@stations.map(&:name).join(', ')
   end
 
   private

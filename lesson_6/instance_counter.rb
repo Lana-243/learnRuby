@@ -4,11 +4,11 @@ module InstanceCounter
   
   @@instances = 0
   def instances
-    @@instances += 1 
+    self.instances
   end
   
   private
   def register_instance
-    self.instances
+    @@instances += 1 
   end
 end
