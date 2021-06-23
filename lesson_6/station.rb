@@ -41,6 +41,3 @@ class Station < RailRoad
    
   end
 end
-
-
-
