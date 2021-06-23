@@ -9,7 +9,7 @@ module InstanceCounter
   end
   
   private
-  def register_instance
+  def self.register_instance
     self.class.instances += 1 
   end
 end
