@@ -12,6 +12,7 @@ class RailRoad
     @trains = []
     @routes = []
     @carriages = []
+    @stations = []
   end
   
   def menu

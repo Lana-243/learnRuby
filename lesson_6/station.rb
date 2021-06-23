@@ -1,13 +1,17 @@
 require_relative 'train_passenger.rb'
+require_relative 'instance_counter.rb'
+require_relative 'main.rb'
 class Station < RailRoad
 
   attr_reader :trains, :name
   @@stations = []
+  include InstanceCounter
 
   def initialize(name)
     @name = name
     @trains = []
-      @@stations << name
+    @@stations << name
+    instances
   end
   
   def add_train(train)

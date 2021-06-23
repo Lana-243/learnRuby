@@ -1,11 +1,15 @@
 require_relative 'route.rb'
+require_relative 'instance_counter.rb'
+require_relative 'company.rb'
 
 class Train < Route
   attr_reader :name, :carriages
   include Company
+  include InstanceCounter
   
   def initialize(name)
     @name = name
+    instances
   end
   
   def find_train(name)
