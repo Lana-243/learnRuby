@@ -1,6 +1,5 @@
 require_relative 'train_passenger.rb'
 require_relative 'instance_counter.rb'
-require_relative 'main.rb'
 class Station
 
   attr_reader :trains, :name

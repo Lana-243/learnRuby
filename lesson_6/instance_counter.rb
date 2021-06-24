@@ -2,11 +2,10 @@
 module InstanceCounter
   
   module ClassMethods
-    class << self
       attr_accessor :instances
-    end
   end
-  protected
+  
+  private
   module InstanceMethods
     def register_instance
       self.class.instances ||= 0 

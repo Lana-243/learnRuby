@@ -1,6 +1,6 @@
+require_relative 'station.rb'
 require_relative 'instance_counter.rb'
 require_relative 'route.rb'
-require_relative 'station.rb'
 require_relative 'train.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'passenger_carriage.rb'
@@ -129,7 +129,7 @@ class RailRoad
     puts 'Enter station name'
     name = gets.chomp 
     if no_station(name)
-      name = Station.new(name) 
+      name = Station.new(name)
     else
       'Station was not created. Please check the data'
     end
