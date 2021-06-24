@@ -1,15 +1,16 @@
+
 module InstanceCounter
   
-  attr_reader :instances
-  class << self
-  
-  @instances = 0
-  def self.instances
-    @instances
+  module ClassMethods
+    class << self
+      attr_reader :instances
+      @instances = 0
+    end
   end
-  
-  private
-  def self.register_instance
-    self.class.instances += 1 
+  protected
+  module InstanceMethods
+    def register_instance
+      self.class.instances += 1
+    end
   end
 end

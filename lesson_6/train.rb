@@ -4,13 +4,13 @@ require_relative 'company.rb'
 
 class Train < Route
   attr_reader :name, :carriages
-  include Company
-  include InstanceCounter
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
   
   def initialize(name, number)
     @name = name
     @number = number
-    register_instance
+    self.register_instance
   end
   
   def find(number)
