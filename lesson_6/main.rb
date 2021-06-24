@@ -114,7 +114,7 @@ class RailRoad
     puts 'Enter last station'
     last_station = gets.chomp
     
-    if no_route(route) && no_station(first_station) && no_station(last_station)
+    if no_route(route) && (no_station(first_station) == false) && (no_station(last_station) == false)
       new_route(route, first_station, last_station)
     else
       'Route was not created. Please check the data'
