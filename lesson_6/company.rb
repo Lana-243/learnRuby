@@ -1,5 +1,3 @@
 module Company
-    def company_name(company)
-        @company = company
-    end
+    attr_accessor :name
 end

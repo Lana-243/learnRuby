@@ -1,11 +1,11 @@
-require_relative 'station.rb'
-require_relative 'instance_counter.rb'
-require_relative 'route.rb'
-require_relative 'train.rb'
-require_relative 'cargo_carriage.rb'
-require_relative 'passenger_carriage.rb'
-require_relative 'train_cargo.rb'
-require_relative 'train_passenger.rb'
+require_relative 'station'
+require_relative 'instance_counter'
+require_relative 'route'
+require_relative 'train'
+require_relative 'cargo_carriage'
+require_relative 'passenger_carriage'
+require_relative 'train_cargo'
+require_relative 'train_passenger'
 
 class RailRoad
   attr_reader :stations, :trains, :routes, :carriages
@@ -32,6 +32,7 @@ class RailRoad
         when '3'
           view
         else
+          puts 'End of program'
           break
       end
     end
@@ -89,21 +90,31 @@ class RailRoad
   def create_cargo
     puts 'Enter train name'
     train = gets.chomp
+    puts 'Enter train number'
+    number = gets.chomp
     if no_train(train)
-      @trains << CargoTrain.new(train)
+      @trains << CargoTrain.new(train, number)
+      train_create_info(train)
     else
-      'Train was not created'
+      puts 'Train was not created as it already exists'
     end
   end
   
   def create_passenger
     puts 'Enter train name'
     train = gets.chomp
+    puts 'Enter train number'
+    number = gets.chomp
     if no_train(train)
-      @trains << PassengerTrain.new(train)
+      @trains << PassengerTrain.new(train, number)
+      train_create_info(train)
     else
-      'Train was not created'
+      puts 'Train was not created as it already exists'
     end
+  end
+  
+  def train_create_info(name)
+    puts "Train #{name} has been created!"
   end
   
   def create_route
@@ -114,24 +125,30 @@ class RailRoad
     puts 'Enter last station'
     last_station = gets.chomp
     
-    if no_route(route) && (no_station(first_station) == false) && (no_station(last_station) == false)
+    if route_validate(route, first_station, last_station)
       new_route(route, first_station, last_station)
     else
-      'Route was not created. Please check the data'
+      puts 'Route was not created. Please check the data'
     end
+  end
+  
+  def route_validate(route, first_station, last_station)
+    no_route(route) && (no_station(first_station) == false) && (no_station(last_station) == false)
   end
   
   def new_route(name, first_station, last_station)
     @routes << Route.new(name, first_station, last_station)
+    puts "Route #{name} has been created!"
   end
 
   def create_station
     puts 'Enter station name'
     name = gets.chomp 
     if no_station(name)
-      name = Station.new(name)
+      @stations << Station.new(name)
+      puts "Station #{name} has been created!"
     else
-      'Station was not created. Please check the data'
+      puts 'Station was not created. Please check the data'
     end
   end
   
@@ -260,6 +277,7 @@ class RailRoad
     route = gets.chomp
     puts 'Enter station name'
     station = gets.chomp
+    
     if (no_route(route) == false) && (no_station(station) == false) && no_station_at_route(route, station)
       route.add_station(station_add)
     else
