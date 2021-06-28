@@ -2,18 +2,19 @@ require_relative 'station'
 require_relative 'instance_counter'
 require_relative 'route'
 require_relative 'train'
-require_relative 'cargo_carriage'
-require_relative 'passenger_carriage'
+require_relative 'cargo_car'
+require_relative 'passenger_car'
 require_relative 'train_cargo'
 require_relative 'train_passenger'
+require_relative 'car'
 
 class RailRoad
-  attr_reader :stations, :trains, :routes, :carriages
+  attr_reader :stations, :trains, :routes, :cars
 
   def initialize
     @trains = []
     @routes = []
-    @carriages = []
+    @cars = []
     @stations = []
   end
   
@@ -50,8 +51,8 @@ class RailRoad
     route =! @routes.find{ |rt| rt.name == route}
   end
   
-  def no_carriages(car)
-    car =! @carriages.find{ |car| car.name == car}
+  def no_cars(car)
+    car =! @cars.find{ |car| car.name == car}
   end
   
   def no_station_at_route(route, station)
@@ -167,8 +168,8 @@ class RailRoad
   
   def train_change
     puts 'Press 1 if you want to assign a route to a train'
-    puts 'Press 2 if you want to add carriages to the train'
-    puts 'Press 3 if you want to delete carriages from the train'
+    puts 'Press 2 if you want to add cars to the train'
+    puts 'Press 3 if you want to delete cars from the train'
     puts 'Press 4 if you want to move train forward'
     puts 'Press 5 if you want to move train backward'
     puts 'Press any other key to exit the program' 
@@ -177,9 +178,9 @@ class RailRoad
     when '1'
       assign_route
     when '2'
-      add_carriages
+      add_cars
     when '3'
-      delete_carriages
+      delete_cars
     when '4'
       move_forward
     when '5'
@@ -199,43 +200,26 @@ class RailRoad
     end
   end
   
-  def add_carriages
+  def add_cars
     puts 'Enter train name'
     train = gets.chomp
-    puts 'Enter carriage name'
-    carriage = gets.chomp
-    puts 'Press 1 if it is Cargo carriage'
-    puts 'Press 2 if it is Passenger carriage'
-    type = gets.chomp
-    if no_train(train) && no_carriages(carriage) && (type = '1' || type = '2')
-      create_carriage(type)
-      add_carriage(train, carriage)
+    puts 'Enter car name'
+    car = gets.chomp
+    if no_train(train) == false
+      car = train&.type == "passenger"? PassengerWagon.new : CargoWagon.new
+      train&.add_car(car)
     else
       'Carriage has not been added. Please check the data'
     end
   end
   
-  def delete_carriages
+  def delete_cars
     puts 'Enter train name'
     train = gets.chomp
-    puts 'Enter carriage name'
-    carriage = gets.chomp
-    if carriage_exists(train, carriage)
-      delete_carriage(train, carriage) 
+    if no_train(train) == false
+      delete_car(train) 
     else
       'Carriage has not been deleted. Please check the data'
-    end
-  end
-  
-  def carriage_exists(train, carriage)
-    carriage =! train.carriages.find{ |car| car.name == carriage}
-  end
-  
-  def create_carriage(type)
-    if type == '1'
-      @carriages << CargoCarriage.new
-    elsif type == '2'
-      @carriages << PassengerCarriage.new
     end
   end
   

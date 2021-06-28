@@ -3,25 +3,25 @@ require_relative 'instance_counter.rb'
 require_relative 'company.rb'
 
 class Train
-  attr_reader :name, :carriages
+  attr_reader :name, :cars
   include InstanceCounter
   # extend InstanceCounter::ClassMethods
   # include InstanceCounter::InstanceMethods
-  
-  def initialize(name, number)
-    @name = name
+  @@trains = []
+  def initialize(number, type)
     @number = number
-    @carriages = []
+    @cars = []
+    @speed = 0
+    @@trains << self
     register_instance
   end
   
-  def find(number)
-    final = @trains.find{ |tr| tr.number == number}
-     if number ==  final.number
-       puts final
-     elsif final == nil
-       puts nil
-     end
+  def self.find(number)
+    @@trains.find { |train| train.number == number }
+  end
+  
+  def self.train_exists(number)
+    number = self.find(number)
   end
 
   def add_route(route)
@@ -46,21 +46,14 @@ class Train
     @route.current_station.add_train(self)
   end
 
-  def add_carriage(train, carriage)
-    add_carriage!(train, carriage) if add_carriage?(train, carriage)
-  end
-  
-  def add_carriage?(train, carriage)
-    (train.class == PassengerTrain && carriage.class == PassengerCarriage) ||(train.class == CargoTrain && carriage.class == CargoCarriage)
-  end
-  
-  def add_carriage!(train, carriage)
-    train.carriages << carriage
+  def add_car(car)
+    @cars << car if speed.zero?
   end
 
   def delete_carriage(train, carriage)
      train.carriages.delete(carriage)
   end
+  
 end
 
 
