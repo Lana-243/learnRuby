@@ -1,9 +1,9 @@
 require_relative 'car'
 
-class PassengerCar < Car
+class CargoCar < Car
   
   def initialize
-    @type = :passenger
-  end
+    @type = :cargo
+  end 
 
 end

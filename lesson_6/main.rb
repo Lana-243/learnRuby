@@ -14,7 +14,6 @@ class RailRoad
   def initialize
     @trains = []
     @routes = []
-    @cars = []
     @stations = []
   end
   
@@ -39,24 +38,20 @@ class RailRoad
     end
   end  
   
-  def no_train(train)
-    train =! @trains.find{ |tr| tr.name == train}
-  end
-  
-  def no_station(station)
-    station =! @stations.find{ |st| st.name == station}
-  end
-  
-  def no_route(route)
-    route =! @routes.find{ |rt| rt.name == route}
-  end
-  
-  def no_cars(car)
-    car =! @cars.find{ |car| car.name == car}
-  end
-  
   def no_station_at_route(route, station)
-    station =! route.route_stations.find{ |st| st.name == st}
+    station.name =! route.route_stations.find{ |st| st.name == st}
+  end
+  
+  def find_train(number)
+    @trains.find { |train| train.number == number }
+  end
+
+  def find_route(name)
+    @routes.find { |rt| rt.route == name }
+  end
+
+  def find_station(name)
+    @stations.find { |station| station.name == name }
   end
   
   def create
@@ -89,33 +84,49 @@ class RailRoad
   end
   
   def create_cargo
-    puts 'Enter train name'
-    train = gets.chomp
     puts 'Enter train number'
     number = gets.chomp
-    if no_train(train)
-      @trains << CargoTrain.new(train, number)
-      train_create_info(train)
+    if find_train(number).nil?
+      @trains << CargoTrain.new(number)
+      train_create_info(number)
     else
-      puts 'Train was not created as it already exists'
+      train_exists_info(number)
     end
   end
   
   def create_passenger
-    puts 'Enter train name'
-    train = gets.chomp
     puts 'Enter train number'
     number = gets.chomp
-    if no_train(train)
-      @trains << PassengerTrain.new(train, number)
-      train_create_info(train)
+    if find_train(number).nil?
+      @trains << PassengerTrain.new(number)
+      train_create_info(number)
     else
-      puts 'Train was not created as it already exists'
+      train_exists_info(number)
     end
   end
   
-  def train_create_info(name)
-    puts "Train #{name} has been created!"
+  def train_create_info(number)
+    puts "Train #{number} has been created!"
+  end
+  
+  def train_exists_info(number)
+    puts "Train #{number} already exists!"
+  end
+  
+  def route_create_info(route)
+    puts "Route #{route} has been created!"
+  end
+  
+  def route_creation_error
+    puts 'Route was not created. Please check the data'
+  end
+  
+  def station_create_info(name)
+    puts "Station #{name} has been created!"
+  end
+  
+  def station_exists_info(name)
+    puts "Station #{name} already exists!"
   end
   
   def create_route
@@ -125,32 +136,35 @@ class RailRoad
     first_station = gets.chomp
     puts 'Enter last station'
     last_station = gets.chomp
-    
     if route_validate(route, first_station, last_station)
       new_route(route, first_station, last_station)
+      route_create_info(route)
     else
-      puts 'Route was not created. Please check the data'
+      route_creation_error
     end
   end
   
   def route_validate(route, first_station, last_station)
-    no_route(route) && (no_station(first_station) == false) && (no_station(last_station) == false)
+    find_route(route).nil? && (find_station(first_station) != nil) && (find_station(last_station) != nil)
   end
   
-  def new_route(name, first_station, last_station)
-    @routes << Route.new(name, first_station, last_station)
-    puts "Route #{name} has been created!"
+  def new_route(route, first_station, last_station)
+    @routes << Route.new(route, first_station, last_station)
   end
 
   def create_station
     puts 'Enter station name'
     name = gets.chomp 
-    if no_station(name)
-      @stations << Station.new(name)
-      puts "Station #{name} has been created!"
+    if find_station(name).nil?
+      new_station(name)
+      station_create_info(name)
     else
-      puts 'Station was not created. Please check the data'
+      station_exists_info(name)
     end
+  end
+  
+  def new_station(name)
+    @stations << Station.new(name)
   end
   
   def change
@@ -193,51 +207,58 @@ class RailRoad
     train = gets.chomp
     puts 'Enter route name'
     route = gets.chomp
-    if no_train(train) && no_route(route)
-      train.add_route(route)
+    if (find_train(train).nil? == false) && (find_route(route).nil? == false)
+      find_train(train).add_route(route)
+      puts 'Route has been assigned'
     else
-      'Route has not been assigned'
+      puts 'Route has not been assigned'
     end
   end
   
   def add_cars
     puts 'Enter train name'
-    train = gets.chomp
+    train_name = gets.chomp
     puts 'Enter car name'
     car = gets.chomp
-    if no_train(train) == false
-      car = train&.type == "passenger"? PassengerWagon.new : CargoWagon.new
-      train&.add_car(car)
+    train = find_train(train_name)
+    if train.nil? == false
+      car = (train.instance_of? PassengerTrain ? PassengerCar.new : CargoCar.new)
+      train.add_car(car)
     else
-      'Carriage has not been added. Please check the data'
+      'Car has not been added. Please check the data'
     end
   end
   
   def delete_cars
     puts 'Enter train name'
-    train = gets.chomp
-    if no_train(train) == false
-      delete_car(train) 
+    train_name = gets.chomp
+    train = find_train(train_name)
+    if (train.nil? == false) && (train.cars.null? == false)
+      train.delete_car(train.cars[-1]) 
     else
-      'Carriage has not been deleted. Please check the data'
+      'Car has not been deleted. Please check the data'
     end
   end
   
   def move_forward
     puts 'Enter train name'
-    train = gets.chomp
-    if no_train(train) == false
+    train_name = gets.chomp
+    train = find_train(train_name)
+    if train.nil? == false
       train.move_forward
+      puts "Train #{train_name} has been moved forward"
     else
-    'There is no such train'
+      puts 'There is no such train'
     end
   end
   
   def move_backwards
     puts 'Enter train name'
-    train = gets.chomp
-    if no_train(train) == false
+    train_name = gets.chomp
+    train = find_train(train_name)
+    if train.nil? == false
       train.move_backward
+      puts "Train #{train_name} has been moved backwards"
     else
       'There is no such train'
     end
@@ -258,12 +279,13 @@ class RailRoad
   
   def change_route_add_station
     puts 'Enter route name'
-    route = gets.chomp
+    route_name = gets.chomp
+    route = find_route(route_name)
     puts 'Enter station name'
-    station = gets.chomp
-    
-    if (no_route(route) == false) && (no_station(station) == false) && no_station_at_route(route, station)
-      route.add_station(station_add)
+    station_name = gets.chomp
+    station = find_station(station_name)
+    if (route.nil? == false) && (station.nil? == false) && no_station_at_route(route, station)
+      route.add_station(station)
     else
       'Station has not been added. Please check the data'
     end
@@ -271,11 +293,15 @@ class RailRoad
   
   def change_delete_station
     puts 'Enter route name'
-    route = gets.chomp
+    route_name = gets.chomp
+    route = find_route(route_name)
     puts 'Enter station name'
-    station = gets.chomp
-    if (no_route(route) == false) && (no_station(station) == false) && (no_station_at_route(route, station) == false)
+    station_name = gets.chomp
+    station = find_station(station_name)
+    if (route.nil? == false) && (station.nil? == false) && (no_station_at_route(route, station) == false) && (route.stations.count >= 2)
       route.delete_station(station)
+    else
+      puts 'Please check the data!'
     end
   end
   
@@ -289,8 +315,9 @@ class RailRoad
         view_station_list
       when '2'
         puts 'Enter station name'
-        station = gets.chomp
-        if no_station(station)
+        station_name = gets.chomp
+        station = find_station(station_name)
+        if station.nil?
           puts 'There is no station with this name'
         else
           puts view_train_list(station)

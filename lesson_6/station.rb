@@ -7,17 +7,17 @@ class Station
   # extend InstanceCounter::ClassMethods
   # include InstanceCounter::InstanceMethods
   
-  @@stations = []
+  @@all_stations = []
   
   def initialize(name)
     @name = name
     @trains = []
-    @@stations << name
+    @@all_stations << self
     register_instance
   end
   
   def add_train(train)
-    add_train!(train) if add_train?(train)
+    @trains << train
   end
   
   def train_leaving(train)
@@ -30,15 +30,5 @@ class Station
   
   def all
     @@stations.map(&:name).join(', ')
-  end
-
-  private
-#shows actions inside the methods
-  def add_train!(train)
-    @trains << train
-  end
-  
-  def add_train?(train)
-   false if @trains.include? train
   end
 end

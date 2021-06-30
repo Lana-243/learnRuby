@@ -6,9 +6,21 @@ class Route
   # extend InstanceCounter::ClassMethods
   # include InstanceCounter::InstanceMethods
   
+  @@routes = []
+  
   def initialize(route, first_station, last_station)
     @route = route
     @route_stations = [first_station, last_station]
+    @@routes << self
+    
+  end
+  
+  def self.find(route)
+    @@routes.find { |rt| rt.route == route }
+  end
+  
+  def self.route_exists(route)
+    route = self.find(route)
   end
   
   def add_station(middle_station)

@@ -1,19 +1,19 @@
 require_relative 'route.rb'
 require_relative 'instance_counter.rb'
-require_relative 'company.rb'
+require_relative 'vendor.rb'
 
 class Train
-  attr_reader :name, :cars
+  attr_reader :name, :cars, :type, :speed
   include InstanceCounter
   # extend InstanceCounter::ClassMethods
   # include InstanceCounter::InstanceMethods
   @@trains = []
   def initialize(number, type)
     @number = number
-    @cars = []
-    @speed = 0
-    @@trains << self
+    @type = type
     register_instance
+    @cars = []
+    @@trains << self
   end
   
   def self.find(number)
@@ -47,11 +47,11 @@ class Train
   end
 
   def add_car(car)
-    @cars << car if speed.zero?
+    @cars << car
   end
 
-  def delete_carriage(train, carriage)
-     train.carriages.delete(carriage)
+  def delete_car(car)
+     train.cars.delete(car)
   end
   
 end
