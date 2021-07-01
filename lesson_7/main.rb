@@ -103,6 +103,8 @@ class RailRoad
     else
       train_exists_info(number)
     end
+  rescue Exception => e
+      puts e.message
   end
   
   def train_create_info(number)
@@ -142,6 +144,8 @@ class RailRoad
     else
       route_creation_error
     end
+  rescue Exception => e
+      puts e.message
   end
   
   def route_validate(route, first_station, last_station)
@@ -161,6 +165,8 @@ class RailRoad
     else
       station_exists_info(name)
     end
+  rescue Exception => e
+      puts e.message
   end
   
   def new_station(name)
