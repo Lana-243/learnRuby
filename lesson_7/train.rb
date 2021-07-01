@@ -6,16 +6,25 @@ class Train
   attr_reader :name, :cars, :type, :speed
   include InstanceCounter
 
-
-
+  NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
+  
   @@trains = []
   def initialize(number, type)
+    register_instance
     @number = number
     @type = type
-    register_instance
+    validate!
     @cars = []
     @@trains << self
   end
+  
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   
   def self.find(number)
     @@trains.find { |train| train.number == number }
@@ -53,6 +62,13 @@ class Train
 
   def delete_car(car)
      train.cars.delete(car)
+  end
+  
+  private
+  
+  def validate
+    raise StandardError, 'Please enter train number' if number == nil
+    raise StandardError, 'Format is incorrect. Please try again: 3 letters/numbers, optional hyphen and 2 letters/numbers' if number !~ NUMBER_FORMAT
   end
   
 end
