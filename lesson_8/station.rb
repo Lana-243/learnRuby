@@ -38,6 +38,10 @@ class Station
     @@all_stations.map(&:name).join(', ')
   end
   
+  def each_train(&block)
+    @trains.each { |train| yield(train) }
+  end
+  
   def validate!
     raise StandardError, 'Please enter station name' if name == nil 
     raise StandardError, 'Station name should have more than 3 characters' if name.length < 3   
