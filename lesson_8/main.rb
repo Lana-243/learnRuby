@@ -40,7 +40,7 @@ class RailRoad
   end  
   
   def no_station_at_route(route, station)
-    station.name =! route.route_stations.find{ |st| st.name == st}
+    station.name =! route.route_stations.find{ |st| st.name == station}
   end
   
   def find_train(number)
@@ -214,11 +214,9 @@ class RailRoad
       move_backwards
     when '6'
       fill_car!
-    end
     when '7'
       occupy_seat!
     end
-    
   end
   
   def assign_route
@@ -226,7 +224,7 @@ class RailRoad
     train = gets.chomp
     puts 'Enter route name'
     route = gets.chomp
-    if (find_train(train).nil? == false) && (find_route(route).nil? == false)
+    if !find_train(train).nil? && !find_route(route).nil?
       find_train(train).add_route(route)
       puts 'Route has been assigned'
     else
@@ -264,7 +262,7 @@ class RailRoad
     puts 'Enter car name'
     car_name = gets.chomp
     car = find_car(car_name)
-    if (train.nil? == false) && (train.cars.null? == false)
+    if !train.nil? && !train.cars.nil?
       train.delete_car(car) 
     else
       puts 'Car has not been deleted. Please check the data'
@@ -275,7 +273,7 @@ class RailRoad
     puts 'Enter train name'
     train_name = gets.chomp
     train = find_train(train_name)
-    if train.nil? == false
+    if !train.nil?
       train.move_forward
       puts "Train #{train_name} has been moved forward"
     else
@@ -287,7 +285,7 @@ class RailRoad
     puts 'Enter train name'
     train_name = gets.chomp
     train = find_train(train_name)
-    if train.nil? == false
+    if !train.nil?
       train.move_backward
       puts "Train #{train_name} has been moved backwards"
     else
@@ -339,7 +337,7 @@ class RailRoad
     puts 'Enter station name'
     station_name = gets.chomp
     station = find_station(station_name)
-    if (route.nil? == false) && (station.nil? == false) && no_station_at_route(route, station)
+    if !route.nil? && !station.nil? && no_station_at_route(route, station)
       route.add_station(station)
     else
       'Station has not been added. Please check the data'
@@ -353,7 +351,7 @@ class RailRoad
     puts 'Enter station name'
     station_name = gets.chomp
     station = find_station(station_name)
-    if (route.nil? == false) && (station.nil? == false) && (no_station_at_route(route, station) == false) && (route.stations.count >= 2)
+    if !route.nil? && !station.nil? && (no_station_at_route(route, station) == false) && (route.stations.count >= 2)
       route.delete_station(station)
     else
       puts 'Please check the data!'

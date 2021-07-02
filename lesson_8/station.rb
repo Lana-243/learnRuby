@@ -43,7 +43,11 @@ class Station
   end
   
   def validate!
-    raise StandardError, 'Please enter station name' if name == nil 
-    raise StandardError, 'Station name should have more than 3 characters' if name.length < 3   
+    errors = []
+    
+    errors << 'Please enter station name' if name == nil 
+    errors << 'Station name should have more than 3 characters' if name.length < 3  
+    
+    raise StandardError, errors.join(". ") if !errors.empty?
   end
 end

@@ -40,11 +40,15 @@ class Route
   
   private
   
-  def validate
-    raise StandardError, 'Please enter route name' if route == nil
-    raise StandardError, 'Please enter first station name'  if first_station == nil
-    raise StandardError, 'Please enter last station name'  if last_station == nil
-    raise StandardError, 'Station name should have more than 3 characters' if ((first_station.length < 3) || (last_station.length < 3))
+  def validate!
+    errors = []
+    
+    errors << 'Please enter route name' if route == nil
+    errors << 'Please enter first station name'  if first_station == nil
+    errors << 'Please enter last station name'  if last_station == nil
+    errors << 'Station name should have more than 3 characters' if ((first_station.length < 3) || (last_station.length < 3))
+  
+    raise StandardError, errors.join(". ") if !errors.empty?
   end
   
 end

@@ -70,9 +70,14 @@ class Train
   
   private
   
-  def validate
-    raise StandardError, 'Please enter train number' if number == nil
-    raise StandardError, 'Format is incorrect. Please try again: 3 letters/numbers, optional hyphen and 2 letters/numbers' if number !~ NUMBER_FORMAT
+  def validate!
+    errors = []
+    
+    errors << 'Please enter train number' if number == nil
+    errors << 'Format is incorrect. Please try again: 3 letters/numbers, optional hyphen and 2 letters/numbers' if number !~ NUMBER_FORMAT
+    
+    raise StandardError, errors.join(". ") if !errors.empty?
+
   end
   
 end
