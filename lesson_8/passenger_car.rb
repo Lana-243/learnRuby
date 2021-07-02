@@ -3,6 +3,7 @@ require_relative 'car'
 class PassengerCar < Car
   
   def initialize(seats)
+    @number = rand(100)
     @type = :passenger
     @seats = seats
     @occupied_seats = 0

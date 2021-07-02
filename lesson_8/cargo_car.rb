@@ -3,6 +3,7 @@ require_relative 'car'
 class CargoCar < Car
   
   def initialize(volume)
+    @number = rand(100)
     @type = :cargo
     @volume = volume
     @occupied_volume = 0

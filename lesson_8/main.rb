@@ -228,7 +228,15 @@ class RailRoad
     car = gets.chomp
     train = find_train(train_name)
     if train.nil? == false
-      car = (train.instance_of? PassengerTrain ? PassengerCar.new : CargoCar.new)
+      if train.instance_of? PassengerTrain 
+        puts 'Please enter number of seats'
+        seats = gets.chomp
+        car = PassengerCar.new(seats)
+      else
+        puts 'Please enter cargo volume'
+        volume = gets.chomp
+        car = CargoCar.new(volume)
+      end
       train.add_car(car)
     else
       'Car has not been added. Please check the data'
@@ -314,20 +322,16 @@ class RailRoad
   def view
     puts 'Press 1 if you want to view station list'
     puts 'Press 2 if you want to view train list at a station'
+    puts 'Press 3. if you want to view train info'
     puts 'Press any other key to exit the program' 
     view_answer = gets.chomp
     case view_answer
       when '1'
         view_station_list
       when '2'
-        puts 'Enter station name'
-        station_name = gets.chomp
-        station = find_station(station_name)
-        if station.nil?
-          puts 'There is no station with this name'
-        else
-          puts view_train_list(station)
-        end
+        view_train_list
+      when '3'
+        view_train_info
     end
   end  
   
@@ -335,8 +339,26 @@ class RailRoad
     puts @stations.map(&:name).join(', ')
   end
 
-  def view_train_list(station)
-    puts station.trains.map(&:name).join(', ')
+  def view_train_list
+    puts 'Enter station name'
+    station_name = gets.chomp
+    station = find_station(station_name)
+    if station.nil?
+      puts 'There is no station with this name'
+    else
+      puts station.trains.map(&:name).join(', ')
+    end
+  end
+  
+  def view_train_info
+    puts 'Enter train name'
+    train_name = gets.chomp
+    train = find_train(train_name)
+    if train.instance_of? PassengerTrain
+      puts "Train name: #{train.name}, "
+    else
+    
+    end
   end
 end
 

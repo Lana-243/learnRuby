@@ -64,6 +64,10 @@ class Train
      train.cars.delete(car)
   end
   
+  def each_car(&block)
+    carriages.each { |car| yield(car) }
+  end
+  
   private
   
   def validate
