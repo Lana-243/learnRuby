@@ -2,6 +2,8 @@ require_relative 'car'
 
 class PassengerCar < Car
   
+  attr_reader :occupied_seats
+  
   def initialize(seats)
     @number = rand(100)
     @type = :passenger
@@ -13,12 +15,12 @@ class PassengerCar < Car
     @occupied_seats += 1 if free_space?
   end
   
-  def free_seats
+  def available_seats
     @seats - @occupied_seats
   end
       
   def free_space?
-    if free_seats <= 0
+    if available_seats <= 0
       raise StandardError, 'Car is full!'
     else
       true
@@ -29,11 +31,8 @@ class PassengerCar < Car
     puts "There are #{@occupied_seats} occupied seats in the car"
   end
   
-  def free_seats_info
-    puts "There are #{self.free_seats} free seats in the car"
+  def available_seats_info
+    puts "There are #{self.available_seats} free seats in the car"
   end
-  
-  protected
-  attr_reader :occupied_seats
 end
 

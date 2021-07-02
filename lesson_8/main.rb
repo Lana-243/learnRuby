@@ -15,6 +15,7 @@ class RailRoad
     @trains = []
     @routes = []
     @stations = []
+    @cars = []
   end
   
   def menu
@@ -52,6 +53,10 @@ class RailRoad
 
   def find_station(name)
     @stations.find { |station| station.name == name }
+  end
+  
+  def find_car(name)
+    @cars.find { |car| car.name == name }
   end
   
   def create
@@ -187,11 +192,13 @@ class RailRoad
   end
   
   def train_change
-    puts 'Press 1 if you want to assign a route to a train'
-    puts 'Press 2 if you want to add cars to the train'
-    puts 'Press 3 if you want to delete cars from the train'
-    puts 'Press 4 if you want to move train forward'
-    puts 'Press 5 if you want to move train backward'
+    puts 'Press 1 to assign a route to a train'
+    puts 'Press 2 to add cars to the train'
+    puts 'Press 3 to delete cars from the train'
+    puts 'Press 4 to move train forward'
+    puts 'Press 5 to move train backward'
+    puts 'Press 6 to fill a cargo car'
+    puts 'Press 7 to occupy passenger seat in a car'
     puts 'Press any other key to exit the program' 
     train_change_answer = gets.chomp
     case train_change_answer  
@@ -205,7 +212,13 @@ class RailRoad
       move_forward
     when '5'
       move_backwards
+    when '6'
+      fill_car!
     end
+    when '7'
+      occupy_seat!
+    end
+    
   end
   
   def assign_route
@@ -238,8 +251,9 @@ class RailRoad
         car = CargoCar.new(volume)
       end
       train.add_car(car)
+      @cars << car
     else
-      'Car has not been added. Please check the data'
+      puts 'Car has not been added. Please check the data'
     end
   end
   
@@ -247,10 +261,13 @@ class RailRoad
     puts 'Enter train name'
     train_name = gets.chomp
     train = find_train(train_name)
+    puts 'Enter car name'
+    car_name = gets.chomp
+    car = find_car(car_name)
     if (train.nil? == false) && (train.cars.null? == false)
-      train.delete_car(train.cars[-1]) 
+      train.delete_car(car) 
     else
-      'Car has not been deleted. Please check the data'
+      puts 'Car has not been deleted. Please check the data'
     end
   end
   
@@ -277,6 +294,30 @@ class RailRoad
       puts 'There is no such train'
     end
   end
+  
+  def fill_car!
+    puts 'Enter car name'
+    car_name = gets.chomp
+    car = find_car(car_name)
+    if car.instance_of? CargoCar
+      puts 'What volume do you want to add?'
+      volume_added = gets.chomp
+      car.fill_car(volume_added)
+    else
+      'There is no cargo car at this name'
+    end  
+  end
+    
+  def occupy_seat!
+    puts 'Enter car name'
+    car_name = gets.chomp
+    car = find_car(car_name)
+    if car.instance_of? PassengerCar
+      car.occupy_seat
+    else
+      'There is no passenger car at this name'
+    end 
+  end  
   
   def route_change
     puts 'Press 1 if you want to add station to the route'
@@ -322,14 +363,14 @@ class RailRoad
   def view
     puts 'Press 1 if you want to view station list'
     puts 'Press 2 if you want to view train list at a station'
-    puts 'Press 3. if you want to view train info'
+    puts 'Press 3. if you want to view car list of the train'
     puts 'Press any other key to exit the program' 
     view_answer = gets.chomp
     case view_answer
       when '1'
         view_station_list
       when '2'
-        view_train_list
+        view_station_info
       when '3'
         view_train_info
     end
@@ -339,14 +380,14 @@ class RailRoad
     puts @stations.map(&:name).join(', ')
   end
 
-  def view_train_list
+  def view_station_info
     puts 'Enter station name'
     station_name = gets.chomp
     station = find_station(station_name)
     if station.nil?
       puts 'There is no station with this name'
     else
-      puts station.trains.map(&:name).join(', ')
+      station.each_train { |train| puts "Train number: #{train.number}, Train type: #{train.type}, Number of cars: #{train.cars.length}" }
     end
   end
   
@@ -355,9 +396,11 @@ class RailRoad
     train_name = gets.chomp
     train = find_train(train_name)
     if train.instance_of? PassengerTrain
-      puts "Train name: #{train.name}, "
+      train.each_car  { |car| puts "Car name: #{car.name}, Car type: #{car.type}, Seats available: #{car.available_seats}, Seats occupied: #{car.occupied_seats} " }
+    elsif train.instance_of? CargoTrain
+      train.each_car  { |car| puts "Car name: #{car.name}, Car type: #{car.type}, Volume available: #{car.available_volume}, Volume occupied: #{car.occupied_volume} " }
     else
-    
+      puts 'Please enter correct train number'
     end
   end
 end
