@@ -1,9 +1,17 @@
 require_relative 'train_passenger'
 require_relative 'instance_counter'
+require_relative 'validation'
+
 class Station
   attr_reader :trains, :name
 
   include InstanceCounter
+  include Validation
+  
+  NAME_FORMAT = /\w.+/i
+  
+  validate :name, :presence
+  validate :name, :format, NAME_FORMAT
 
   @@all_stations = []
 
@@ -11,15 +19,9 @@ class Station
     @name = name
     @trains = []
     validate!
+    is_unique?
     @@all_stations << self
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def add_train(train)
@@ -42,12 +44,8 @@ class Station
     @trains.each { |train| yield(train) }
   end
 
-  def validate!
-    errors = []
-
-    errors << 'Please enter station name' if name.nil?
-    errors << 'Station name should have more than 3 characters' if name.length < 3
-
-    raise StandardError, errors.join('. ') unless errors.empty?
+  def is_unique?
+    raise 'This station already exists!' if self.class.all.find { |s| s.name == name }
+    true
   end
 end

@@ -1,13 +1,18 @@
 require_relative 'route'
 require_relative 'instance_counter'
 require_relative 'vendor'
+require_relative 'validation'
 
 class Train
   attr_reader :name, :cars, :type, :speed
-
+  
   include InstanceCounter
-
+  include Validation
+  
   NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
+  
+  validate :name, :presence, NUMBER_FORMAT
+  validate :name, :format, NUMBER_FORMAT
 
   @trains = []
   def initialize(number, type)
@@ -68,16 +73,4 @@ class Train
     cars.each { |car| yield(car) }
   end
 
-  private
-
-  def validate!
-    errors = []
-
-    errors << 'Please enter train number' if number.nil?
-    if number !~ NUMBER_FORMAT
-      errors << 'Format is incorrect. Please try again: 3 letters/numbers, optional hyphen and 2 letters/numbers'
-    end
-
-    raise StandardError, errors.join('. ') unless errors.empty?
-  end
 end

@@ -1,25 +1,25 @@
 require_relative 'instance_counter'
+require_relative 'validation'
+require_relative 'station'
+
 class Route
   attr_reader :route, :first_station, :last_station, :route_stations
 
   include InstanceCounter
+  include Validation
   # extend InstanceCounter::ClassMethods
   # include InstanceCounter::InstanceMethods
 
   @@routes = []
-
+  
+  validate :first_station, :presence
+  validate :last_station, :presence
+  
   def initialize(route, first_station, last_station)
     @route = route
     @route_stations = [first_station, last_station]
     validate!
     @@routes << self
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def self.find(route)
@@ -38,18 +38,4 @@ class Route
     @stations.delete(station) if @stations.include? station
   end
 
-  private
-
-  def validate!
-    errors = []
-
-    errors << 'Please enter route name' if route.nil?
-    errors << 'Please enter first station name' if first_station.nil?
-    errors << 'Please enter last station name' if last_station.nil?
-    if (first_station.length < 3) || (last_station.length < 3)
-      errors << 'Station name should have more than 3 characters'
-    end
-
-    raise StandardError, errors.join('. ') unless errors.empty?
-  end
 end
