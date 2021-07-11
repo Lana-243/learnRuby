@@ -15,6 +15,7 @@ module Validation
   end
 
   module InstanceMethods
+    
     def validate!
       self.class.instance_variable_get(:@validations).each do |attr_name, validations|
         validations.each { |v| send("validate_#{v[0]}", attr_name, *v[1]) }

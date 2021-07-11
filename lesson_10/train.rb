@@ -4,15 +4,15 @@ require_relative 'vendor'
 require_relative 'validation'
 
 class Train
-  attr_reader :name, :cars, :type, :speed
+  attr_reader :number, :cars, :type, :speed
   
   include InstanceCounter
   include Validation
   
   NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
   
-  validate :name, :presence, NUMBER_FORMAT
-  validate :name, :format, NUMBER_FORMAT
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
 
   @trains = []
   def initialize(number, type)
@@ -72,5 +72,4 @@ class Train
   def each_car
     cars.each { |car| yield(car) }
   end
-
 end

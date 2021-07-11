@@ -14,6 +14,10 @@ class Station
   validate :name, :format, NAME_FORMAT
 
   @@all_stations = []
+  
+  def self.all
+    @@all_stations ||= []
+  end
 
   def initialize(name)
     @name = name
@@ -34,10 +38,6 @@ class Station
 
   def trains_list
     @trains.map(&:train).join(', ')
-  end
-
-  def self.all
-    @@all_stations.map(&:name).join(', ')
   end
 
   def each_train
